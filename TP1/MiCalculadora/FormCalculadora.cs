@@ -18,75 +18,73 @@ namespace MiCalculadora
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Cerrara el formulario.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        /// <summary>
-        /// Borrará los datos de los TextBox, ComboBox y Label de la pantalla.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnLimpiar_Click(object sender, EventArgs e)
-        {
-            Limpiar();
-        }
-
-        /// <summary>
-        /// Convertirá el resultado, de existir, a binario.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnConvertirABinario_Click(object sender, EventArgs e)
         {
-            this.lblResultado.Text = new Numero().DecimalBinario(this.lblResultado.Text);
+            this.lblResultado.Text = new Operando().DecimalBinario(this.lblResultado.Text);
         }
 
-        /// <summary>
-        /// Convertirá el resultado, de existir y ser binario, a decimal.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnConvertirADecimal_Click(object sender, EventArgs e)
         {
-            this.lblResultado.Text = new Numero().BinarioDecimal(this.lblResultado.Text);
+            this.lblResultado.Text = new Operando().BinarioDecimal(this.lblResultado.Text);
         }
 
         private void Limpiar()
         {
             this.txtNumero1.Text = "";
             this.txtNumero2.Text = "";
-            this.cmbOperador.Text = "";
-            this.lblResultado.Text = "0";
+            this.cmbOperator.Text = "";
+            this.lblResultado.Text = "";
+            //lstOperaciones.Items.Clear();
+        }
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
         }
 
-        /// <summary>
-        /// Recibirá los dos números y el operador para luego llamar al método Operar de Calculadora
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        private static double Operar(string numero1, string numero2, string operador)
+        {
+            char CharOperator;
+            char.TryParse(operador, out CharOperator);
+            return Calculadora.Operar(new Operando(numero1), new Operando(numero2), CharOperator);
+        }
         private void btnOperar_Click(object sender, EventArgs e)
         {
-            double numero = Operar(txtNumero1.Text, txtNumero2.Text, cmbOperador.Text);
+            //string msj;
+            double numero = Operar(txtNumero1.Text, txtNumero2.Text, cmbOperator.Text);
             this.lblResultado.Text = numero.ToString();
-        }
-        private static double Operar(string num1, string num2, string operador)
-        {
-            return Calculadora.Operar(new Numero(num1), new Numero(num2), operador);
+            this.lstOperaciones.Items.Add($"{this.txtNumero1.Text} " +
+                                          $"{this.cmbOperator.Text} " +
+                                          $"{this.txtNumero2.Text} = " +
+                                          $"{this.lblResultado.Text}");
         }
 
+  
+       private void FormCalculadora_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(MessageBox.Show("¿Está seguro de querer salir?", "Salir", MessageBoxButtons.YesNo,MessageBoxIcon.Question)== DialogResult.No)
+            {
+                e.Cancel = true;//Cancela el cierre del formulario
+            }
+        }
 
         private void FormCalculadora_Load(object sender, EventArgs e)
         {
             Limpiar();
         }
 
+        private void txtNumero1_TextChanged(object sender, EventArgs e)
+        {
+            Operando num1 = new Operando(txtNumero1.Text);
+        }
 
+        private void txtNumero2_TextChanged(object sender, EventArgs e)
+        {
+            Operando num2 = new Operando(txtNumero2.Text);
+        }
     }
 }

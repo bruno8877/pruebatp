@@ -7,53 +7,56 @@ using System.Threading.Tasks;
 namespace Entidades
 {
     public static class Calculadora
-    {   /// <summary>
-        /// valida que el operador recibido sea +, -, / o*.
-        /// </summary>
-        /// <param name="Operador">+, -, / o*</param>
-        /// <returns>Retorna el operador validado o + </returns>
-        private static string ValidarOperador(char Operador)
-        {
-            string rtn = "+";
-
-            if(Operador == '+' || Operador == '-' || Operador == '/' || Operador == '*')
-            {
-                rtn = Operador.ToString();
-            }
-            return rtn;
-        }
-        
+    {
+        #region METODOS
         /// <summary>
-        /// Hace el calculo de num1 y num2
+        ///  validará y realizará la operación pedida entre ambos números.
         /// </summary>
-        /// <param name="Num1">Primer numero a operar</param>
-        /// <param name="Num2">Segundo numero a operar</param>
-        /// <param name="Operador">+, -, / o*</param>
-        /// <returns>Retorna el resultado de dicha operacion</returns>
-        public static double Operar(Numero Num1, Numero Num2, string Operador)
+        /// <param name="num1">Operando numero 1</param>
+        /// <param name="num2">Operando numero 2</param>
+        /// <param name="operador"></param>
+        /// <returns></returns>
+        public static double Operar(Operando num1, Operando num2, char operador)
         {
-            double rtn;
-           Operador = ValidarOperador(Convert.ToChar(Operador));//convierte el string a char
+            double rtn=0;
 
-            switch (Operador)
+            switch(ValidarOperador(operador))
             {
-                case "/":
-                    rtn = Num1 / Num2;
+                case '/':
+                    rtn = num1 / num2;
                     break;
 
-                case "*":
-                    rtn = Num1 * Num2;
+                case '*':
+                    rtn = num1 * num2;
                     break;
 
-                case "-":
-                    rtn = Num1 - Num2;
+                case '-':
+                    rtn = num1 - num2;
                     break;
 
                 default:
-                    rtn = Num1 + Num2;
+                    rtn = num1 + num2;
                     break;
             }
             return rtn;
+
         }
+        /// <summary>
+        /// Deberá validar que el operador recibido sea +, -, / o *. 
+        /// </summary>
+        /// <param name="operador">Variable char con el operador</param>
+        /// <returns>Caso contrario retornará +</returns>
+        private static char ValidarOperador(char operador)
+        {
+            char rtn = '+';
+
+            if (operador == '+' || operador == '-' || operador == '/' || operador == '*')
+            {
+                rtn = operador;
+            }
+
+            return rtn;
+        }
+        #endregion
     }
 }
